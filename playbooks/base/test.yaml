@@ -1,0 +1,7 @@
+---
+- name: Common/base setup of env machines
+  hosts: all
+  tasks:
+  - name: Install OS packages
+    ansible.builtin.include_role:
+      name: packages_install
