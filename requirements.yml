@@ -1,4 +1,4 @@
 ---
 collections:
-  - name: https://github.com/pablintino/pablintino.base_infra.git
+  - name: https://github.com/pablintino/pbtn.common.git
     type: git
