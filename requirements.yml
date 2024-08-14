@@ -2,3 +2,4 @@
 collections:
   - name: https://github.com/pablintino/pbtn.common.git
     type: git
+    version: master
