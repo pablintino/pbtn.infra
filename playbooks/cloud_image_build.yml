@@ -1,0 +1,6 @@
+---
+- name: Cloud image build
+  hosts: localhost
+  gather_facts: true
+  roles:
+    - pbtn.infra.cloud_image_build

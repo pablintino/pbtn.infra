@@ -1,0 +1,15 @@
+---
+- name: Common/base setup of env machines
+  hosts: all
+  tasks:
+    - name: Install custom CA certificates
+      ansible.builtin.import_role:
+        name: pablintino.base_infra.ca_install
+
+    - name: Install repositories and packages
+      ansible.builtin.import_role:
+        name: pablintino.base_infra.package_install
+
+    - name: Setup firewall
+      ansible.builtin.import_role:
+        name: pablintino.base_infra.firewall_setup

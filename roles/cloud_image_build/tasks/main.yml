@@ -1,0 +1,60 @@
+---
+- name: Push the image to the PVE server
+  pbtn.common.proxmox_node_storage:
+    api_url: "{{ pbi_pve_api_url }}"
+    api_token_id: "{{ pbi_pve_token_id  | default(omit) }}"
+    api_token: "{{ pbi_pve_token | default(omit) }}"
+    api_username: "{{ pbi_pve_username | default(omit) }}"
+    api_password: "{{ pbi_pve_password | default(omit) }}"
+    api_skip_tls_verification: "{{ pbi_pve_tls_skip | default(omit) }}"
+    node: "{{ pbi_cbi_pve_node }}"
+    storage: "{{ pbi_cbi_pve_storage_source }}"
+    source: "{{ pbi_cbi_source }}"
+    content_type: iso
+    state: present
+
+- name: Push the requested files to the S3 bucket
+  amazon.aws.s3_object:
+    secret_key: "{{ pbi_s3_secret_key | default(omit) }}"
+    access_key: "{{ pbi_s3_access_key | default(omit) }}"
+    endpoint_url: "{{ pbi_s3_url | default(omit)  }}"
+    region: "{{ pbi_s3_region | default(omit)  }}"
+    validate_certs: >-
+      {{
+        (not pbi_s3_tls_skip)
+        if (pbi_s3_tls_skip is defined) else omit
+      }}
+    retries: 10
+    permission: "public-read"
+    encrypt: false
+    bucket: "{{ pbi_cbi_s3_bucket }}"
+    object: "{{ 9999999999999999999999 | random | to_uuid }}"
+    src: >-
+      {{
+        item
+        if (item is abs) else
+        [
+          pbi_packer_workspace | default(pbi_packer_template_path),
+         item
+        ] | path_join
+      }}
+    mode: put
+  loop: "{{ pbi_cib_s3_push_files | default([]) }}"
+  register: _pbi_cib_s3_put_out
+
+- name: Set the pushed content in an easy to use dict
+  ansible.builtin.set_fact:
+    pbi_cib_s3_objects: >-
+      {{
+        pbi_cib_s3_objects | default({}) |
+        combine({
+          item.item: item.url | split("?") | first
+        })
+      }}
+  loop: "{{ _pbi_cib_s3_put_out.results | default([]) }}"
+  loop_control:
+    label: "{{ item.item }}"
+
+- name: Run the packer build
+  ansible.builtin.include_role:
+    name: pbtn.common.packer
