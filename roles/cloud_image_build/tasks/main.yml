@@ -24,8 +24,8 @@
         (not pbi_s3_tls_skip)
         if (pbi_s3_tls_skip is defined) else omit
       }}
-    retries: 10
-    permission: "public-read"
+    retries: "{{ pbi_cbi_s3_retries }}"
+    permission: "{{ pbi_cbi_s3_permissions }}"
     encrypt: false
     bucket: "{{ pbi_cbi_s3_bucket }}"
     object: "{{ 9999999999999999999999 | random | to_uuid }}"
