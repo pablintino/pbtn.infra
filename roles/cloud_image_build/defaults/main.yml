@@ -1,3 +1,4 @@
 ---
 pbi_cbi_s3_permissions: []
 pbi_cbi_s3_retries: 10
+pbi_cbi_pve_image_push_timeout: 1800

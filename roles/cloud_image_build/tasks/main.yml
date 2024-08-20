@@ -11,6 +11,7 @@
     storage: "{{ pbi_cbi_pve_storage_source }}"
     source: "{{ pbi_cbi_source }}"
     content_type: iso
+    timeout: "{{ pbi_cbi_pve_image_push_timeout }}"
     state: present
 
 - name: Push the requested files to the S3 bucket
