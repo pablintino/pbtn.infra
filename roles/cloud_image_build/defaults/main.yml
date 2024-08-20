@@ -1,2 +1,3 @@
 ---
-# defaults file for cloud_image_build
+pbi_cbi_s3_permissions: []
+pbi_cbi_s3_retries: 10
