@@ -42,6 +42,7 @@ tags: []
 # range specifiers can be set and are separated by ','
 dependencies:
   "git+https://github.com/pablintino/pbtn.common.git": "master"
+  "amazon.aws": ">=8.0.0"
 
 # The URL of the originating SCM repository
 repository: http://example.com/repository
