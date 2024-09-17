@@ -27,7 +27,7 @@
       "required-packages": [
         {
           "type": "apt",
-          "name": "tar"
+          "name": "unzip"
         }
       ]
     }
